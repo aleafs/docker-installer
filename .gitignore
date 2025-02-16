@@ -1,0 +1,4 @@
+.*
+*.swp
+*.log
+/docker/binary
