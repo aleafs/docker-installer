@@ -5,7 +5,8 @@ export LANG=en_US.UTF-8
 APPHOME=$(cd -- "$(dirname -- ${0})" && pwd)
 declare -r APPHOME
 
-PKGHOME="${APPHOME}/docker/binary/"
+PKGHOME="${APPHOME}/docker/pkg/"
+declare -r PKGHOME
 
 DOCKER_URL="https://download.docker.com/linux/static/stable"
 declare -r DOCKER_URL
