@@ -11,7 +11,7 @@ permissions:
   packages: write
 
 jobs:
-  download:
+  release:
     runs-on: ubuntu-latest
     timeout-minutes: 60
 
@@ -20,6 +20,9 @@ jobs:
         arch: [ "x86_64", "aarch64" ]
 
     steps:
+      - name: Check out action
+        uses: actions/checkout@v4
+
       - name: Setup
         run: |
           rm -rf ./pkg/${{ matrix.arch }}
