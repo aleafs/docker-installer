@@ -44,7 +44,7 @@ jobs:
         with:
           tag_name: latest
           make_latest: ${{ startsWith(github.ref_name, 'v') }}
-          prerelease: ${{ !startsWith(github.ref_name, 'v') }}
+          prerelease: false
           generate_release_notes: true
           append_body: true
           files: |
