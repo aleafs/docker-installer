@@ -8,6 +8,7 @@ on:
       - v*
 
 permissions:
+  contents: write
   packages: write
 
 jobs:
@@ -28,7 +29,7 @@ jobs:
           rm -rf ./pkg/${{ matrix.arch }}
           mkdir -p ./pkg/${{ matrix.arch }}
 
-      - name: Download binary
+      - name: Binary
         working-directory: ./pkg/${{ matrix.arch }}
         run: |
           curl -o docker.tgz https://download.docker.com/linux/static/stable/${{ matrix.arch }}/docker-27.5.1.tgz
