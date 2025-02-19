@@ -24,16 +24,12 @@ jobs:
       - name: Check out action
         uses: actions/checkout@v4
 
-      - name: Setup
-        run: |
-          rm -rf ./pkg/${{ matrix.arch }}
-          mkdir -p ./pkg/${{ matrix.arch }}
-
       - name: Binary
-        working-directory: ./pkg/${{ matrix.arch }}
         run: |
-          curl -o docker.tgz https://download.docker.com/linux/static/stable/${{ matrix.arch }}/docker-27.5.1.tgz
-          curl -o docker-compose https://github.com/docker/compose/releases/download/v2.33.0/docker-compose-linux-${{ matrix.arch }}
+          rm -rf ./pkg
+          mkdir -p ./pkg
+          curl -o ./pkg/docker.tgz https://download.docker.com/linux/static/stable/${{ matrix.arch }}/docker-27.5.1.tgz
+          curl -o ./pkg/docker-compose https://github.com/docker/compose/releases/download/v2.33.0/docker-compose-linux-${{ matrix.arch }}
 
       - name: Package
         run: |
