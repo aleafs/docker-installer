@@ -32,11 +32,11 @@ jobs:
 
       - name: Docker
         run: |
-          curl -o ./pkg/docker.tgz https://download.docker.com/linux/static/stable/${{ matrix.arch }}/docker-${{ env.version }}.tgz
+          curl -L -o ./pkg/docker.tgz https://download.docker.com/linux/static/stable/${{ matrix.arch }}/docker-${{ env.version }}.tgz
 
       - name: Compose
         run: |
-          curl -o ./pkg/docker-compose https://github.com/docker/compose/releases/download/v2.33.0/docker-compose-linux-${{ matrix.arch }}
+          curl -L -o ./pkg/docker-compose https://github.com/docker/compose/releases/download/v2.33.0/docker-compose-linux-${{ matrix.arch }}
 
       - name: Package
         run: |
