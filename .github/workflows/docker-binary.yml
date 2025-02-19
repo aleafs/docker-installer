@@ -1,0 +1,35 @@
+name: "release docker"
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - v*
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    steps:
+      - name: Check out action
+        uses: actions/checkout@v4
+
+      - name: Download binary
+        run: |
+          ./download.sh ${{ github.ref_name }}
+          tar cvzf docker.tar.gz ./docker
+          
+      - name: Upload Asset
+        uses: softprops/action-gh-release@v2
+        with:
+          #token: ${{ secrets.GITHUB_TOKEN }}
+          name: docker-${{ github.ref_name }}
+          tag_name: ${{ github.ref_name }}
+          make_latest: true
+          prerelease: false
+          generate_release_notes: true
+          append_body: true
+          files: |
+            *.tar.gz
