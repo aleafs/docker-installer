@@ -4,8 +4,6 @@ on:
   push:
     branches:
       - main
-    tags:
-      - v*
 
 permissions:
   contents: write
@@ -20,6 +18,9 @@ jobs:
       matrix:
         arch: [ "x86_64", "aarch64" ]
 
+    env:
+      version: 27.5.1
+
     steps:
       - name: Check out
         uses: actions/checkout@v4
@@ -31,7 +32,7 @@ jobs:
 
       - name: Docker
         run: |
-          curl -o ./pkg/docker.tgz https://download.docker.com/linux/static/stable/${{ matrix.arch }}/docker-27.5.1.tgz
+          curl -o ./pkg/docker.tgz https://download.docker.com/linux/static/stable/${{ matrix.arch }}/docker-${{ env.version }}.tgz
 
       - name: Compose
         run: |
@@ -44,9 +45,9 @@ jobs:
       - name: Upload
         uses: softprops/action-gh-release@v2
         with:
-          name: v27.5.1
-          tag_name: v27.5.1
-          make_latest: ${{ startsWith(github.ref_name, 'v') }}
+          name: v${{ env.version }}
+          tag_name: v${{ env.version }}
+          make_latest: true
           prerelease: false
           generate_release_notes: true
           append_body: true
