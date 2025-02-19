@@ -13,8 +13,8 @@ declare -r PKGHOME
 function offline_install_docker() {
   if [ -f "${PKGHOME}/docker.tgz" ]; then
     tar -xzvf "${PKGHOME}/docker.tgz" && \
-    chmod +x "${PKGHOME}/docker/*" && \
-    mv -fv "${PKGHOME}/docker/*" /usr/bin/
+    chmod +x "${APPHOME}"/docker/* && \
+    mv -fv "${APPHOME}"/docker/* /usr/bin/
   fi
 }
 
@@ -39,7 +39,7 @@ Type=notify
 # exists and systemd currently does not support the cgroup feature set required
 # for containers run by docker
 ExecStart=/usr/bin/dockerd -H unix://var/run/docker.sock
-ExecReload=/bin/kill -s HUP $MAINPID
+ExecReload=/bin/kill -s HUP \$MAINPID
 # Having non-zero Limit*s causes performance problems due to accounting overhead
 # in the kernel. We recommend using cgroups to do container-local accounting.
 LimitNOFILE=infinity
@@ -64,6 +64,7 @@ EOF
 
 offline_install_docker
 offline_install_compose
+config_system_service
 
 systemctl daemon-reload
 systemctl --force enable docker.service
