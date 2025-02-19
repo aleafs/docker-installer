@@ -21,14 +21,20 @@ jobs:
         arch: [ "x86_64", "aarch64" ]
 
     steps:
-      - name: Check out action
+      - name: Check out
         uses: actions/checkout@v4
 
-      - name: Binary
+      - name: Cleanup
         run: |
           rm -rf ./pkg
           mkdir -p ./pkg
+
+      - name: Docker
+        run: |
           curl -o ./pkg/docker.tgz https://download.docker.com/linux/static/stable/${{ matrix.arch }}/docker-27.5.1.tgz
+
+      - name: Compose
+        run: |
           curl -o ./pkg/docker-compose https://github.com/docker/compose/releases/download/v2.33.0/docker-compose-linux-${{ matrix.arch }}
 
       - name: Package
@@ -38,7 +44,8 @@ jobs:
       - name: Upload
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: latest
+          name: v27.5.1
+          tag_name: v27.5.1
           make_latest: ${{ startsWith(github.ref_name, 'v') }}
           prerelease: false
           generate_release_notes: true
