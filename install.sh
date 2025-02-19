@@ -5,7 +5,7 @@ export LANG=en_US.UTF-8
 APPHOME=$(cd -- "$(dirname -- ${0})" && pwd)
 declare -r APPHOME
 
-PKGHOME="${APPHOME}/pkg/$(uname -m)"
+PKGHOME="${APPHOME}/pkg"
 declare -r PKGHOME
 
 function offline_install_docker() {
