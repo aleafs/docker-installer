@@ -7,20 +7,39 @@ on:
     tags:
       - v*
 
+permissions:
+  packages: write
+
 jobs:
-  release:
+  download:
     runs-on: ubuntu-latest
     timeout-minutes: 60
 
+    strategy:
+      matrix:
+        arch: [ "x86_64", "aarch64" ]
+
     steps:
-      - name: Check out action
-        uses: actions/checkout@v4
+      - name: Setup
+        run: |
+          rm -rf ./pkg/${{ matrix.arch }}
+          mkdir -p ./pkg/${{ matrix.arch }}
 
       - name: Download binary
+        working-directory: ./pkg/${{ matrix.arch }}
         run: |
-          ./download.sh ${{ github.ref_name }}
-          tar cvzf docker.tar.gz ./docker
-          
+          curl -o docker.tgz https://download.docker.com/linux/static/stable/${{ matrix.arch }}/docker-27.5.1.tgz
+          curl -o docker-compose https://github.com/docker/compose/releases/download/v2.33.0/docker-compose-linux-${{ matrix.arch }}
+
+  upload:
+    needs:
+      - download
+
+    steps:
+      - name: Tar
+        run: |
+          tar cvzf docker.tar.gz pkg *.sh *.md
+
       - name: Upload Asset
         uses: softprops/action-gh-release@v2
         with:
