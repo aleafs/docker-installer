@@ -31,22 +31,16 @@ jobs:
           curl -o docker.tgz https://download.docker.com/linux/static/stable/${{ matrix.arch }}/docker-27.5.1.tgz
           curl -o docker-compose https://github.com/docker/compose/releases/download/v2.33.0/docker-compose-linux-${{ matrix.arch }}
 
-  upload:
-    runs-on: ubuntu-latest
-    needs:
-      - download
-
-    steps:
-      - name: Tar
+      - name: Package
         run: |
-          tar cvzf docker.tar.gz pkg *.sh *.md
+          tar cvzf docker-${{ matrix.arch }}.tar.gz pkg *.sh *.md
 
-      - name: Upload Asset
+      - name: Upload
         uses: softprops/action-gh-release@v2
         with:
           #token: ${{ secrets.GITHUB_TOKEN }}
-          name: docker-${{ github.ref_name }}
-          tag_name: ${{ github.ref_name }}
+          name: docker-binary
+          tag_name: latest
           make_latest: true
           prerelease: false
           generate_release_notes: true
