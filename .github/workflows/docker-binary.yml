@@ -25,18 +25,10 @@ jobs:
       - name: Check out
         uses: actions/checkout@v4
 
-      - name: Cleanup
+      - name: Prepare
         run: |
-          rm -rf ./pkg
-          mkdir -p ./pkg
-
-      - name: Docker
-        run: |
-          curl -fsSL -o ./pkg/docker.tgz https://download.docker.com/linux/static/stable/${{ matrix.arch }}/docker-${{ env.version }}.tgz
-
-      - name: Compose
-        run: |
-          curl -fsSL -o ./pkg/docker-compose https://github.com/docker/compose/releases/download/v2.33.0/docker-compose-linux-${{ matrix.arch }}
+          curl -fsSL -o docker.tgz https://download.docker.com/linux/static/stable/${{ matrix.arch }}/docker-${{ env.version }}.tgz
+          curl -fsSL -o docker-compose https://github.com/docker/compose/releases/download/v2.33.0/docker-compose-linux-${{ matrix.arch }}
 
       - name: Package
         run: |

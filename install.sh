@@ -7,22 +7,19 @@ export LANG=en_US.UTF-8
 APPHOME=$(cd -- "$(dirname -- ${0})" && pwd)
 declare -r APPHOME
 
-PKGHOME="${APPHOME}/pkg"
-declare -r PKGHOME
-
 function offline_install_docker() {
-  if [ -f "${PKGHOME}/docker.tgz" ]; then
-    tar -xzvf "${PKGHOME}/docker.tgz" && \
+  if [ -f "${APPHOME}/docker.tgz" ]; then
+    tar -xzvf "${APPHOME}/docker.tgz" && \
     chmod +x "${APPHOME}"/docker/* && \
     mv -fv "${APPHOME}"/docker/* /usr/bin/
   fi
 }
 
 function offline_install_compose() {
-    if [ -f "${PKGHOME}/docker-compose" ]; then
-      chmod +x "${PKGHOME}/docker-compose" && \
+    if [ -f "${APPHOME}/docker-compose" ]; then
+      chmod +x "${APPHOME}/docker-compose" && \
       mkdir -p /usr/libexec/docker/cli-plugins && \
-      mv -fv "${PKGHOME}/docker-compose" /usr/libexec/docker/cli-plugins/
+      mv -fv "${APPHOME}/docker-compose" /usr/libexec/docker/cli-plugins/
     fi
 }
 
