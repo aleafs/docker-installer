@@ -30,7 +30,7 @@ jobs:
         with:
           go-version: 1.24
 
-      - name: Prepare
+      - name: Download
         run: |
           curl -fsSL -o docker.tgz https://download.docker.com/linux/static/stable/${{ matrix.arch }}/docker-${{ env.version }}.tgz
           curl -fsSL -o docker-compose https://github.com/docker/compose/releases/download/v2.33.0/docker-compose-linux-${{ matrix.arch }}
@@ -43,6 +43,8 @@ jobs:
           *)
             GOARCH="amd64" ;;
           esac
+          
+          echo ${GOARCH}
           GOARCH=${GOARCH} go build -o config-doctor main.go
           tar cvzf docker-${{ matrix.arch }}.tar.gz --owner=root --group=root docker* *.md *.sh config*
 
