@@ -11,17 +11,18 @@ import (
 	"time"
 )
 
-func hostInterfaces() ([]*net.IPNet, error) {
+func hostInterfaceAddr() ([]net.IP, error) {
 	addresses, err := net.InterfaceAddrs()
 	if err != nil {
 		return nil, err
 	}
 
-	var output = make([]*net.IPNet, 0)
+	var output = make([]net.IP, 0)
 	for _, each := range addresses {
 		if addr, ok := each.(*net.IPNet); ok {
-			if addr.IP.IsPrivate() && addr.IP.To4() != nil {
-				output = append(output, addr)
+			ipv4 := addr.IP.To4()
+			if ipv4 != nil && ipv4.IsPrivate() {
+				output = append(output, ipv4)
 			}
 		}
 	}
@@ -41,36 +42,24 @@ type dockerInfo struct {
 	DefaultAddressPools []addressPool `json:"DefaultAddressPools"`
 }
 
-func dockerInformation() (*dockerInfo, error) {
+func dockerInformation() (dockerInfo, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	cmd := exec.CommandContext(ctx, "docker",
-		"system", "info", "--format", "{{json .}}")
-	buffer, err := cmd.Output()
-	if err != nil {
-		return nil, err
-	}
-
 	var config dockerInfo
-	if err = json.Unmarshal(buffer, &config); err != nil {
-		return nil, err
+	buffer, err := exec.CommandContext(ctx, "docker",
+		"system", "info", "--format", "{{json .}}").Output()
+	if err != nil {
+		return config, err
 	}
 
-	return &config, nil
+	err = json.Unmarshal(buffer, &config)
+	return config, err
 }
 
-func main() {
-
-	config, err := dockerInformation()
-	if err != nil {
-		log.Println(err)
-	}
-
-	if config == nil {
-		config = &dockerInfo{
-			NumCPU: runtime.NumCPU(),
-		}
+func validateConfig(config dockerInfo) dockerInfo {
+	if config.NumCPU < 1 {
+		config.NumCPU = runtime.NumCPU()
 	}
 
 	if len(config.DefaultAddressPools) < 1 {
@@ -82,13 +71,31 @@ func main() {
 		}
 	}
 
-	fmt.Println(config)
+	return config
+}
 
-	addrs, err := hostInterfaces()
+func main() {
+
+	config, err := dockerInformation()
 	if err != nil {
-		log.Fatalln(err)
+		log.Println(err)
 	}
 
-	fmt.Println(addrs)
+	config = validateConfig(config)
+
+	ipaddr, err := hostInterfaceAddr()
+	if len(ipaddr) > 0 {
+		for _, each := range config.DefaultAddressPools {
+			_, mask, _ := net.ParseCIDR(each.Base)
+			if mask != nil {
+				for _, ip := range ipaddr {
+					if mask.Contains(ip) {
+						// 地址可能冲突
+						fmt.Println(mask.String() + ":" + ip.String())
+					}
+				}
+			}
+		}
+	}
 
 }
