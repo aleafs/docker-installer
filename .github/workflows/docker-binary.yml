@@ -25,6 +25,12 @@ jobs:
       - name: Check out
         uses: actions/checkout@v4
 
+      - user: actions/setup-go@v5
+        with:
+          go-version: 1.24
+        run: |
+          GOOS=linux GOARCH=${{ matrix.arch }} go build -o config-check main.go
+
       - name: Prepare
         run: |
           curl -fsSL -o docker.tgz https://download.docker.com/linux/static/stable/${{ matrix.arch }}/docker-${{ env.version }}.tgz
