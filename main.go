@@ -6,23 +6,38 @@ import (
 	"fmt"
 	"log"
 	"net"
+	"os"
 	"os/exec"
 	"runtime"
 	"time"
 )
 
-func hostInterfaceAddr() ([]net.IP, error) {
-	addresses, err := net.InterfaceAddrs()
+type interfaceAddr struct {
+	Name string
+	Addr net.IP
+}
+
+func hostInterfaceAddr() ([]interfaceAddr, error) {
+	interfaces, err := net.Interfaces()
 	if err != nil {
 		return nil, err
 	}
 
-	var output = make([]net.IP, 0)
-	for _, each := range addresses {
-		if addr, ok := each.(*net.IPNet); ok {
-			ipv4 := addr.IP.To4()
-			if ipv4 != nil && ipv4.IsPrivate() {
-				output = append(output, ipv4)
+	var output = make([]interfaceAddr, 0)
+	for _, each := range interfaces {
+		address, _ := each.Addrs()
+		if len(address) < 1 {
+			continue
+		}
+
+		for _, addr := range address {
+			if ipNet, ok := addr.(*net.IPNet); ok {
+				if ipNet.IP.IsPrivate() && ipNet.IP.To4() != nil {
+					output = append(output, interfaceAddr{
+						Name: each.Name,
+						Addr: ipNet.IP,
+					})
+				}
 			}
 		}
 	}
@@ -82,20 +97,35 @@ func main() {
 	}
 
 	config = validateConfig(config)
-
 	ipaddr, err := hostInterfaceAddr()
 	if len(ipaddr) > 0 {
 		for _, each := range config.DefaultAddressPools {
 			_, mask, _ := net.ParseCIDR(each.Base)
 			if mask != nil {
 				for _, ip := range ipaddr {
-					if mask.Contains(ip) {
+					if mask.Contains(ip.Addr) {
 						// 地址可能冲突
-						fmt.Println(mask.String() + ":" + ip.String())
+						fmt.Println(mask.String() + ":" + ip.Name)
 					}
 				}
 			}
 		}
 	}
 
+}
+
+func search() string {
+	for _, each := range []string{
+		"/etc/docker/daemon.json",
+	} {
+		return each
+	}
+
+	return "/etc/docker/daemon.json"
+}
+
+// @see: https://docs.docker.com/reference/cli/dockerd/#daemon-configuration-file
+func aaa() {
+	os.Stat("/etc/docker/daemon.json")
+	exec.Command("dockerd", "--validate", "--config-file").CombinedOutput()
 }
