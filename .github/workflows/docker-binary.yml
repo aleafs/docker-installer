@@ -25,11 +25,6 @@ jobs:
       - name: Check out
         uses: actions/checkout@v4
 
-      - name: Set Env
-        if: matrix.arch == 'aarch64'
-        run: |
-          export GOARCH=arm64
-
       - name: Setup Go
         uses: actions/setup-go@v5
         with:
@@ -40,10 +35,16 @@ jobs:
           curl -fsSL -o docker.tgz https://download.docker.com/linux/static/stable/${{ matrix.arch }}/docker-${{ env.version }}.tgz
           curl -fsSL -o docker-compose https://github.com/docker/compose/releases/download/v2.33.0/docker-compose-linux-${{ matrix.arch }}
 
+      - name: Set Env
+        if: matrix.arch == 'aarch64'
+        run: |
+          export GOARCH=arm64
+
       - name: Package
         run: |
-          go build -o docker-config main.go
-          tar cvzf docker-${{ matrix.arch }}.tar.gz --owner=root --group=root docker* *.md *.sh
+          env
+          go build -o config-doctor main.go
+          tar cvzf docker-${{ matrix.arch }}.tar.gz --owner=root --group=root docker* *.md *.sh config*
 
       - name: Upload
         uses: softprops/action-gh-release@v2
