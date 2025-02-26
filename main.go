@@ -9,6 +9,7 @@ import (
 	"os"
 	"os/exec"
 	"runtime"
+	"syscall"
 	"time"
 )
 
@@ -111,7 +112,6 @@ func main() {
 			}
 		}
 	}
-
 }
 
 func search() string {
@@ -128,4 +128,18 @@ func search() string {
 func aaa() {
 	os.Stat("/etc/docker/daemon.json")
 	exec.Command("dockerd", "--validate", "--config-file").CombinedOutput()
+}
+
+// data-root
+func diskUsage(prefix string) (uint64, uint64, error) {
+	var (
+		stat syscall.Statfs_t
+		err  = syscall.Statfs(prefix, &stat)
+	)
+
+	if err != nil {
+		return 0, 0, err
+	}
+
+	return stat.Blocks * uint64(stat.Bsize), stat.Bfree * uint64(stat.Bsize), nil
 }
