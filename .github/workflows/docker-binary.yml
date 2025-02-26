@@ -39,11 +39,11 @@ jobs:
         run: |
           case ${{ matrix.arch }} in
           aarch64)
-            GOOS="arm64" ;;
+            GOARCH="arm64" ;;
           *)
-            GOOS="amd64" ;;
+            GOARCH="amd64" ;;
           esac
-          GOOS=${GOOS} go build -o config-doctor main.go
+          GOARCH=${GOARCH} go build -o config-doctor main.go
           tar cvzf docker-${{ matrix.arch }}.tar.gz --owner=root --group=root docker* *.md *.sh config*
 
       - name: Upload
