@@ -3,7 +3,7 @@ package main
 import (
 	"context"
 	"encoding/json"
-	"fmt"
+	"github.com/fatih/color"
 	"log"
 	"net"
 	"os"
@@ -105,8 +105,7 @@ func main() {
 			if mask != nil {
 				for _, ip := range ipaddr {
 					if mask.Contains(ip.Addr) {
-						// 地址可能冲突
-						fmt.Println(mask.String() + ":" + ip.Name)
+						color.Red("%s (%s) conflicts %s\n", ip.Addr, ip.Name, mask.String())
 					}
 				}
 			}
