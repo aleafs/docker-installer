@@ -25,11 +25,6 @@ jobs:
       - name: Check out
         uses: actions/checkout@v4
 
-      - name: Setup Go
-        uses: actions/setup-go@v5
-        with:
-          go-version: 1.24
-
       - name: Download
         run: |
           curl -fsSL -o docker.tgz https://download.docker.com/linux/static/stable/${{ matrix.arch }}/docker-${{ env.version }}.tgz
@@ -37,16 +32,7 @@ jobs:
 
       - name: Package
         run: |
-          case ${{ matrix.arch }} in
-          aarch64)
-            GOARCH="arm64" ;;
-          *)
-            GOARCH="amd64" ;;
-          esac
-          
-          echo ${GOARCH}
-          GOARCH=${GOARCH} go build -o config-doctor main.go
-          tar cvzf docker-${{ matrix.arch }}.tar.gz --owner=root --group=root docker* *.md *.sh config*
+          tar cvzf docker-${{ matrix.arch }}.tar.gz --owner=root --group=root docker* *.md *.sh
 
       - name: Upload
         uses: softprops/action-gh-release@v2
