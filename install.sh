@@ -9,10 +9,10 @@ declare -r APPHOME
 
 function offline_install_docker() {
   if [ -f "${APPHOME}/docker.tgz" ]; then
-    tar -xzvf "${APPHOME}/docker.tgz" -C "${APPHOME}/temp" && \
-    chmod +x "${APPHOME}/temp/"* && \
-    mv -fv "${APPHOME}/temp/"* /usr/bin/ && \
-    rm -fr "${APPHOME}/temp"
+    rm -fr /tmp/docker 2>/dev/null
+    tar -xzf "${APPHOME}/docker.tgz" -C /tmp && \
+    chmod +x "/tmp/docker/"* && \
+    mv -fv "/tmp/docker/"* /usr/bin/ && rm -fr "/tmp/docker"
   fi
 }
 
