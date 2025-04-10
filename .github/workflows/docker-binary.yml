@@ -32,7 +32,7 @@ jobs:
 
       - name: Package
         run: |
-          tar cvzf docker-${{ matrix.arch }}.tar.gz --owner=root --group=root docker* *.md *.sh
+          tar cvzf docker-${{ matrix.arch }}.tar.gz --owner=root --group=root docker* *.sh
 
       - name: Upload
         uses: softprops/action-gh-release@v2
