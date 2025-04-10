@@ -24,7 +24,7 @@ function offline_install_compose() {
     fi
 }
 
-function setup_system_service() {
+function config_system_service() {
   cat > /usr/lib/systemd/system/docker.service << EOF
 [Unit]
 Description=Docker Application Container Engine
@@ -106,7 +106,7 @@ EOF
 offline_install_docker
 offline_install_compose
 config_docker_root_dir
-setup_system_service
+config_system_service
 
 systemctl daemon-reload
 systemctl --force enable docker.service
