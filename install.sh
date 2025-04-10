@@ -68,8 +68,8 @@ function config_docker_root_dir() {
     return
   fi
 
-  target=$(df | grep -vE '^Filesystem|tmpfs|cdrom' | sort -nr -k4 | awk -v s=${threshold} '{if($4>=s){print $6}}' | head -n1)
-  if [ "X" = "X${target}" ]; then
+  target=$(df | grep -vE '^Filesystem|tmpfs|cdrom' | sort -nr -k4 | awk '{print $6}' | head -n1)
+  if [ ${#target} -le 1 ]; then
     return
   fi
 
