@@ -61,7 +61,7 @@ EOF
 }
 
 function config_docker_root_dir() {
-  threshold=214748364800
+  threshold=209715200
   available=$(df /var/lib | awk '{print $4}' | tail -n1)
   if [ "${available}" -ge ${threshold} ]; then
     # greater than 200GB
