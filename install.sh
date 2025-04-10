@@ -24,7 +24,7 @@ function offline_install_compose() {
     fi
 }
 
-function config_system_service() {
+function setup_system_service() {
   cat > /usr/lib/systemd/system/docker.service << EOF
 [Unit]
 Description=Docker Application Container Engine
@@ -60,9 +60,53 @@ WantedBy=multi-user.target
 EOF
 }
 
+function config_docker_root_dir() {
+  threshold=214748364800
+  available=$(df /var/lib | awk '{print $4}' | tail -n1)
+  if [ "${available}" -ge ${threshold} ]; then
+    # greater than 200GB
+    return
+  fi
+
+  target=$(df | grep -vE '^Filesystem|tmpfs|cdrom' | sort -nr -k4 | awk -v s=${threshold} '{if($4>=s){print $6}}' | head -n1)
+  if [ "X" = "X${target}" ]; then
+    return
+  fi
+
+  target="${target}/docker-data"
+  if [ -e "${target}" ]; then
+    return
+  fi
+
+  echo "Will set docker root dir to \"${target}\", Yes/No?"
+  read -t 30 -r prompt
+  case "${prompt-No}" in
+    Yes|Y|yes)
+    ;;
+  *)
+    echo "Cancelled!"
+    return
+    ;;
+  esac
+
+  suffix=$(date +"%Y%m%d")
+  config="/etc/docker/daemon.json"
+  if [ -f "${config}" ]; then
+    mv -fv "${config}" "${config}.${suffix}"
+  fi
+
+  prefix=$(dirname -- "${config}")
+  mkdir -p "${prefix}" && cat > "${config}" << EOF
+{
+  "data-root": "${target}"
+}
+EOF
+}
+
 offline_install_docker
 offline_install_compose
-config_system_service
+config_docker_root_dir
+setup_system_service
 
 systemctl daemon-reload
 systemctl --force enable docker.service
