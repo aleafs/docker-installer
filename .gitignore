@@ -3,5 +3,4 @@
 *.log
 *.tgz
 *.gz
-/docker-compose
-/config-doctor
+plugin/*

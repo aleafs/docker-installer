@@ -112,21 +112,16 @@ conflicts:
 # Contents to add to the package
 # This can be binaries or any other files.
 contents:
-  - src: ./cache/
-    dst: /usr/bin
+  - src: ./docker/*
+    dst: /usr/bin/
     type: tree
     file_info:
       mode: 0755
       owner: root
       group: root
 
-  - src: ./cache/docker-compose
-    dst: /usr/libexec/docker/cli-plugins
-    type: tree
-    file_info:
-      mode: 0755
-      owner: root
-      group: root
+  - src: ./plugin/
+    dst: /usr/libexec/docker/cli-plugins/
 
   - src: ./config/docker.service
     dst: /usr/lib/systemd/system/docker.service

@@ -19,7 +19,7 @@ jobs:
         arch: [ "x86_64", "aarch64" ]
 
     env:
-      version: 27.5.1
+      SEMVER: 27.5.1
 
     steps:
       - name: Check out
@@ -27,12 +27,22 @@ jobs:
 
       - name: Download
         run: |
-          curl -fsSL -o docker.tgz https://download.docker.com/linux/static/stable/${{ matrix.arch }}/docker-${{ env.version }}.tgz
-          curl -fsSL -o docker-compose https://github.com/docker/compose/releases/download/v2.33.0/docker-compose-linux-${{ matrix.arch }}
+          curl -fSL -o docker.tgz https://download.docker.com/linux/static/stable/${{ matrix.arch }}/docker-${{ env.SEMVER }}.tgz
+          find ./plugin -type f | xargs rm -f && \
+          curl -fSL -o ./plugin/docker-compose https://github.com/docker/compose/releases/download/v2.33.0/docker-compose-linux-${{ matrix.arch }}
 
-      - name: Package
-        run: |
-          tar cvzf docker-${{ matrix.arch }}.tar.gz --owner=root --group=root docker* *.sh
+      - name: Create deb package
+        uses: skynet-core/nfpm@v1.5
+        id: deb-package
+        with:
+          config: "nfpm.yaml"
+          packager: "deb"
+      - name: Create rpm package
+        uses: skynet-core/nfpm@v1.5
+        id: rpm-package
+        with:
+          config: "nfpm.yaml"
+          packager: "rpm"
 
       - name: Upload
         uses: softprops/action-gh-release@v2
@@ -44,4 +54,5 @@ jobs:
           generate_release_notes: true
           append_body: true
           files: |
-            *.tar.gz
+            *.rpm
+            *.deb
