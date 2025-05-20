@@ -39,7 +39,7 @@ jobs:
       - name: Create deb Package
         id: deb-package
         run: |
-          docker run --rm -v $PWD:/tmp -w /tmp goreleaser/nfpm package \
+          docker run --rm -v $PWD:/tmp -e SEMVER=${{ env.SEMVER }} -e GOARCH=${{ matrix.arch }} -w /tmp goreleaser/nfpm package \
               --config /tmp/nfpm.yaml \
               --target /tmp \
               --packager deb
@@ -47,7 +47,7 @@ jobs:
       - name: Create rpm Package
         id: rpm-package
         run: |
-          docker run --rm -v $PWD:/tmp -w /tmp goreleaser/nfpm package \
+          docker run --rm -v $PWD:/tmp -e SEMVER=${{env.SEMVER}} -e GOARCH=${{matrix.arch}} -w /tmp goreleaser/nfpm package \
               --config /tmp/nfpm.yaml \
               --target /tmp \
               --packager rpm
