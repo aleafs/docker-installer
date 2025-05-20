@@ -32,6 +32,7 @@ Documentation=https://docs.docker.com
 After=network-online.target firewalld.service
 Wants=network-online.target
 [Service]
+Environment=container="disable apparmor"
 Type=notify
 # the default is not to use systemd for cgroups because the delegate issues still
 # exists and systemd currently does not support the cgroup feature set required
