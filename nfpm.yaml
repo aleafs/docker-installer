@@ -1,5 +1,5 @@
 # Name. (required)
-name: 1stblue-edge
+name: docker
 
 # Architecture. (required)
 # This will expand any env var you set in the field, e.g. version: ${GOARCH}
@@ -55,25 +55,25 @@ priority: extra
 # This will expand any env var you set in the field, e.g. maintainer: ${GIT_COMMITTER_NAME} <${GIT_COMMITTER_EMAIL}>
 # Defaults to empty on rpm and apk
 # Leaving the 'maintainer' field unset will not be allowed in a future version
-maintainer: 1stblue.com <hello@1stblue.com>
+maintainer: aleafs <aleafs@qq.com>
 
 # Description.
 # Defaults to `no description given`.
 # Most packagers call for a one-line synopsis of the package. Some (like deb)
 # also call for a multi-line description starting on the second line.
-description: 1stblue Edge Adapter
+description: Docker Application Container Engine
 
 # Vendor.
 # This will expand any env var you set in the field, e.g. vendor: ${VENDOR}
 # This is only used by the rpm packager.
-vendor: 1stblue.com
+vendor: www.docker.com
 
 # Package's homepage.
 # This will expand any env var you set in the field, e.g. homepage: ${CI_PROJECT_URL}
-homepage: https://www.1stblue.com
+homepage: https://www.docker.com
 
 # License.
-license: GPL
+license: MIT
 
 # Disables globbing for files, config_files, etc.
 disable_globbing: false
@@ -93,15 +93,11 @@ provides:
 # the env var approach can be used to account for differences in platforms
 # e.g. rhel needs nginx >= 1:1.18 and deb needs nginx (>= 1.18.0)
 depends:
-  - glibc >= 2.34
 
 # Recommended packages. (overridable)
 # This will expand any env var you set in the field, e.g. ${RECOMMENDS_BLA}
 # the env var approach can be used to account for differences in platforms
 recommends:
-  - openjdk-17-jdk >= 17.0.2
-  - xxd
-  - krb5-user
 
 # Suggested packages. (overridable)
 # This will expand any env var you set in the field, e.g. ${SUGGESTS_BLA}
@@ -116,24 +112,29 @@ conflicts:
 # Contents to add to the package
 # This can be binaries or any other files.
 contents:
-  - src: ./target/BUILD/
-    dst: /opt/1stblue/bin
+  - src: ./cache/
+    dst: /usr/bin
     type: tree
     file_info:
       mode: 0755
       owner: root
       group: root
 
-  - src: ./dist/config/
-    dst: /opt/1stblue/config/
+  - src: ./cache/docker-compose
+    dst: /usr/libexec/docker/cli-plugins
+    type: tree
+    file_info:
+      mode: 0755
+      owner: root
+      group: root
+
+  - src: ./config/docker.service
+    dst: /usr/lib/systemd/system/docker.service
+
+  - src: ./config/daemon.json
+    dst: /etc/docker/daemon.json
     type: config|noreplace
 
-  - src: ./dist/system/logrotate.conf
-    dst: /etc/logrotate.d/1stblue
-    type: config|noreplace
-
-  - src: ./dist/system/1stblue.service
-    dst: /usr/lib/systemd/system/1stblue-edge.service
 
 # Umask to be used on files without explicit mode set.
 #
@@ -151,5 +152,5 @@ umask: 0o002
 
 # Scripts to run at specific stages. (overridable)
 scripts:
-  postinstall: ./dist/script/postinstall.sh
-  preremove: ./dist/script/preremove.sh
+  postinstall: ./script/postinstall.sh
+  preremove: ./script/preremove.sh

@@ -8,6 +8,12 @@
 ./install.sh
 ```
 
+## nfpm
+
+```bash
+SEMVER="${VERSION}" nfpm package -f ./nfpm.yaml -p [deb|rpm]
+```
+
 ## TODO
 
 ### `/etc/docker/daemon.json`
