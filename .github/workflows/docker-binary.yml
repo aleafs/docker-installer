@@ -37,18 +37,20 @@ jobs:
           curl -fSL -o ./docker-compose https://github.com/docker/compose/releases/download/v2.33.0/docker-compose-linux-${{ matrix.arch }}
 
       - name: Create deb Package
-        uses: burningalchemist/action-gh-nfpm@v1
         id: deb-package
-        with:
-          config: nfpm.yaml
-          packager: deb
+        run: |
+          docker run --rm -v $PWD:/tmp -w /tmp goreleaser/nfpm package \
+              --config /tmp/nfpm.yml \
+              --target /tmp \
+              --packager deb
 
       - name: Create rpm Package
-        uses: burningalchemist/action-gh-nfpm@v1
         id: rpm-package
-        with:
-          config: nfpm.yaml
-          packager: rpm
+        run: |
+          docker run --rm -v $PWD:/tmp -w /tmp goreleaser/nfpm package \
+              --config /tmp/nfpm.yml \
+              --target /tmp \
+              --packager deb
 
       - name: Upload
         uses: softprops/action-gh-release@v2
