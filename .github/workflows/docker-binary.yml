@@ -40,7 +40,7 @@ jobs:
         id: deb-package
         run: |
           docker run --rm -v $PWD:/tmp -w /tmp goreleaser/nfpm package \
-              --config /tmp/nfpm.yml \
+              --config /tmp/nfpm.yaml \
               --target /tmp \
               --packager deb
 
@@ -48,9 +48,9 @@ jobs:
         id: rpm-package
         run: |
           docker run --rm -v $PWD:/tmp -w /tmp goreleaser/nfpm package \
-              --config /tmp/nfpm.yml \
+              --config /tmp/nfpm.yaml \
               --target /tmp \
-              --packager deb
+              --packager rpm
 
       - name: Upload
         uses: softprops/action-gh-release@v2
