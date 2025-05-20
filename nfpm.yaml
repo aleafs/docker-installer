@@ -120,8 +120,8 @@ contents:
       owner: root
       group: root
 
-  - src: ./plugin/
-    dst: /usr/libexec/docker/cli-plugins/
+  - src: ./docker-compose
+    dst: /usr/libexec/docker/cli-plugins/docker-compose
 
   - src: ./config/docker.service
     dst: /usr/lib/systemd/system/docker.service

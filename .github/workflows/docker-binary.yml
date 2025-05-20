@@ -25,20 +25,24 @@ jobs:
       - name: Check out
         uses: actions/checkout@v4
 
-      - name: Download
+      - name: Download Docker
         run: |
           rm -rf ./docker || echo
-          curl -fSL -o docker.tgz https://download.docker.com/linux/static/stable/${{ matrix.arch }}/docker-${{ env.SEMVER }}.tgz
-          rm -rf ./plugin || mkdir ./plugin
-          curl -fSL -o ./plugin/docker-compose https://github.com/docker/compose/releases/download/v2.33.0/docker-compose-linux-${{ matrix.arch }}
+          curl -fSL -o docker.tgz https://download.docker.com/linux/static/stable/${{ matrix.arch }}/docker-${{ env.SEMVER }}.tgz && \
+          tar zxvf docker.tgz
 
-      - name: Create deb package
+      - name: Download Plugin
+        run: |
+          rm -rf ./docker-* && \
+          curl -fSL -o ./docker-compose https://github.com/docker/compose/releases/download/v2.33.0/docker-compose-linux-${{ matrix.arch }}
+
+      - name: Create deb Package
         uses: skynet-core/nfpm@v1.5
         id: deb-package
         with:
           config: "nfpm.yaml"
           packager: "deb"
-      - name: Create rpm package
+      - name: Create rpm Package
         uses: skynet-core/nfpm@v1.5
         id: rpm-package
         with:

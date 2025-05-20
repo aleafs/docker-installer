@@ -6,5 +6,5 @@
 *.rpm
 *.deb
 *.apk
-plugin
 docker
+docker-*
