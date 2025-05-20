@@ -27,8 +27,9 @@ jobs:
 
       - name: Download
         run: |
+          rm -rf ./docker || echo
           curl -fSL -o docker.tgz https://download.docker.com/linux/static/stable/${{ matrix.arch }}/docker-${{ env.SEMVER }}.tgz
-          find ./plugin -type f | xargs rm -f && \
+          rm -rf ./plugin || mkdir ./plugin
           curl -fSL -o ./plugin/docker-compose https://github.com/docker/compose/releases/download/v2.33.0/docker-compose-linux-${{ matrix.arch }}
 
       - name: Create deb package
@@ -47,8 +48,8 @@ jobs:
       - name: Upload
         uses: softprops/action-gh-release@v2
         with:
-          name: v${{ env.version }}
-          tag_name: v${{ env.version }}
+          name: v${{ env.SEMVER }}
+          tag_name: v${{ env.SEMVER }}
           make_latest: true
           prerelease: false
           generate_release_notes: true
