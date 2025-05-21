@@ -122,6 +122,10 @@ contents:
 
   - src: ./docker-compose
     dst: /usr/libexec/docker/cli-plugins/docker-compose
+    file_info:
+      mode: 0755
+      owner: root
+      group: root
 
   - src: ./config/docker.service
     dst: /usr/lib/systemd/system/docker.service
