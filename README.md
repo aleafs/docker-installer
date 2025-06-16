@@ -2,6 +2,10 @@
 
 离线环境下 `Linux` 上 `Docker` 和 `docker compose`安装包。
 
+## Version
+
+* v27.5.1-* 对应`docker engine`为`27.5.1`.
+
 ## OS Compatibility
 
 感谢[阿里云市场](https://market.aliyun.com/products/57742013?page=1)提供常见操作系统镜像供验证。
