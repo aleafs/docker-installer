@@ -10,7 +10,7 @@
 
 感谢[阿里云市场](https://market.aliyun.com/products/57742013?page=1)提供常见操作系统镜像供验证。
 
-| Platform           | 包管理  |   x86_64 / amd64   |  arm64 / aarch64   |
+| Platform           | 包管理  |   x86_64 / amd64   |  aarch64 / arm64   |
 |:-------------------|:----:|:------------------:|:------------------:|
 | CentOS             | rpm  | :white_check_mark: |                    |
 | RHEL               | rpm  | :white_check_mark: |                    |
