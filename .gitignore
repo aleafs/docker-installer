@@ -3,5 +3,8 @@
 *.log
 *.tgz
 *.gz
-/docker-compose
-/config-doctor
+*.rpm
+*.deb
+*.apk
+docker
+docker-*

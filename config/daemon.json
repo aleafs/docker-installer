@@ -1,0 +1,16 @@
+{
+  "selinux-enabled": false,
+  "data-root": "/var/lib/docker",
+  "default-address-pools": [
+    {
+      "base": "172.16.0.0/16",
+      "size": 24
+    }
+  ],
+  "registry-mirrors": [
+    "https://docker.m.daocloud.io",
+    "https://i19u6ml5.mirror.aliyuncs.com",
+    "https://hub-mirror.c.163.com",
+    "https://mirror.baidubce.com"
+  ]
+}

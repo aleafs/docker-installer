@@ -9,3 +9,10 @@ rpm -i docker.rpm
 ```
 
 ## OS Compatibility
+
+| 发行版    | 包管理 | x86_64 | arm64 |
+|:-------|:---:|:------:|------:|
+| CentOS | rpm |        |       |
+| Ubuntu |     |        |       |
+| Suse   |     |        |       |
+| Kylin  |     |        |       |

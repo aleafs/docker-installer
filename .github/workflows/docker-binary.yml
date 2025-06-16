@@ -19,29 +19,48 @@ jobs:
         arch: [ "x86_64", "aarch64" ]
 
     env:
-      version: 27.5.1
+      SEMVER: 27.5.1
 
     steps:
       - name: Check out
         uses: actions/checkout@v4
 
-      - name: Download
+      - name: Download Docker
         run: |
-          curl -fsSL -o docker.tgz https://download.docker.com/linux/static/stable/${{ matrix.arch }}/docker-${{ env.version }}.tgz
-          curl -fsSL -o docker-compose https://github.com/docker/compose/releases/download/v2.33.0/docker-compose-linux-${{ matrix.arch }}
+          rm -rf ./docker || echo
+          curl -fSL -o docker.tgz https://download.docker.com/linux/static/stable/${{ matrix.arch }}/docker-${{ env.SEMVER }}.tgz && \
+          tar zxvf docker.tgz
 
-      - name: Package
+      - name: Download Plugin
         run: |
-          tar cvzf docker-${{ matrix.arch }}.tar.gz --owner=root --group=root docker* *.sh
+          rm -rf ./docker-* && \
+          curl -fSL -o ./docker-compose https://github.com/docker/compose/releases/download/v2.33.0/docker-compose-linux-${{ matrix.arch }}
+
+      - name: Create deb Package
+        id: deb-package
+        run: |
+          docker run --rm -v $PWD:/tmp -e SEMVER=${{ env.SEMVER }} -e GOARCH=${{ matrix.arch }} -w /tmp goreleaser/nfpm package \
+              --config /tmp/nfpm.yaml \
+              --target /tmp \
+              --packager deb
+
+      - name: Create rpm Package
+        id: rpm-package
+        run: |
+          docker run --rm -v $PWD:/tmp -e SEMVER=${{env.SEMVER}} -e GOARCH=${{matrix.arch}} -w /tmp goreleaser/nfpm package \
+              --config /tmp/nfpm.yaml \
+              --target /tmp \
+              --packager rpm
 
       - name: Upload
         uses: softprops/action-gh-release@v2.2.2
         with:
-          name: v${{ env.version }}
-          tag_name: v${{ env.version }}
+          name: v${{ env.SEMVER }}
+          tag_name: v${{ env.SEMVER }}
           make_latest: true
           prerelease: false
           generate_release_notes: true
           append_body: true
           files: |
-            *.tar.gz
+            *.rpm
+            *.deb
