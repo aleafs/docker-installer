@@ -5,12 +5,7 @@
 ## How to use
 
 ```bash
-./install.sh
+rpm -i docker.rpm
 ```
 
-## TODO
-
-### `/etc/docker/daemon.json`
-
-- [ ] Network 配置
-- [ ] Volume 配置
+## OS Compatibility

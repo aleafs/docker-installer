@@ -35,7 +35,7 @@ jobs:
           tar cvzf docker-${{ matrix.arch }}.tar.gz --owner=root --group=root docker* *.sh
 
       - name: Upload
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v2.2.2
         with:
           name: v${{ env.version }}
           tag_name: v${{ env.version }}
