@@ -2,8 +2,10 @@ name: "release docker"
 
 on:
   push:
+    tags:
+      - v*
     branches:
-      - main
+      - "*"
 
 permissions:
   contents: write
@@ -53,13 +55,12 @@ jobs:
               --packager rpm
 
       - name: Upload
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v2.3.2
         with:
-          name: v${{ env.SEMVER }}
-          tag_name: v${{ env.SEMVER }}
-          make_latest: true
-          prerelease: false
-          generate_release_notes: true
+          tag_name: ${{ startsWith(github.ref, 'refs/tags/') && env.SEMVER || 'nightly' }}
+          make_latest: ${{ startsWith(github.ref, 'refs/tags/') }}
+          prerelease: ${{ !startsWith(github.ref, 'refs/tags/') }}
+          generate_release_notes: false
           append_body: true
           files: |
             *.rpm

@@ -66,7 +66,7 @@ description: Docker Application Container Engine
 # Vendor.
 # This will expand any env var you set in the field, e.g. vendor: ${VENDOR}
 # This is only used by the rpm packager.
-vendor: www.docker.com
+vendor: aleafs
 
 # Package's homepage.
 # This will expand any env var you set in the field, e.g. homepage: ${CI_PROJECT_URL}
@@ -108,7 +108,6 @@ suggests:
 # This will expand any env var you set in the field, e.g. ${CONFLICTS_BLA}
 # the env var approach can be used to account for differences in platforms
 conflicts:
-  - runc
 
 # Contents to add to the package
 # This can be binaries or any other files.
@@ -152,5 +151,6 @@ umask: 0o002
 
 # Scripts to run at specific stages. (overridable)
 scripts:
+  preinstall: ./script/preinstall.sh
   postinstall: ./script/postinstall.sh
   preremove: ./script/preremove.sh

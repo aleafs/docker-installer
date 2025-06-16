@@ -2,21 +2,15 @@
 
 离线环境下 `Linux` 上 `Docker` 和 `docker compose`安装包。
 
-## How to use
+## OS Compatibility
 
-```bash
-./install.sh
-```
+感谢[阿里云市场](https://market.aliyun.com/products/57742013?page=1)提供常见操作系统镜像供验证。
 
-## nfpm
-
-```bash
-SEMVER="${VERSION}" nfpm package -f ./nfpm.yaml -p [deb|rpm]
-```
-
-## TODO
-
-### `/etc/docker/daemon.json`
-
-- [ ] Network 配置
-- [ ] Volume 配置
+| Platform           | 包管理  |   x86_64 / amd64   |  arm64 / aarch64   |
+|:-------------------|:----:|:------------------:|:------------------:|
+| CentOS             | rpm  | :white_check_mark: |                    |
+| RHEL               | rpm  | :white_check_mark: |                    |
+| SUSE Linux 15      | rpm  | :white_check_mark: |                    |
+| Kylin v10          | rpm  | :white_check_mark: | :white_check_mark: |
+| openEuler 20/22/24 | rpm  | :white_check_mark: |                    |
+| Ubuntu             | dpkg |        :x:         |                    |
