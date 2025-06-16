@@ -38,14 +38,6 @@ jobs:
           rm -rf ./docker-* && \
           curl -fSL -o ./docker-compose https://github.com/docker/compose/releases/download/v2.33.0/docker-compose-linux-${{ matrix.arch }}
 
-      - name: Create deb Package
-        id: deb-package
-        run: |
-          docker run --rm -v $PWD:/tmp -e SEMVER=${{ env.SEMVER }} -e GOARCH=${{ matrix.arch }} -w /tmp goreleaser/nfpm package \
-              --config /tmp/nfpm.yaml \
-              --target /tmp \
-              --packager deb
-
       - name: Create rpm Package
         id: rpm-package
         run: |
