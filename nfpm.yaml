@@ -66,7 +66,7 @@ description: Docker Application Container Engine
 # Vendor.
 # This will expand any env var you set in the field, e.g. vendor: ${VENDOR}
 # This is only used by the rpm packager.
-vendor: www.docker.com
+vendor: aleafs
 
 # Package's homepage.
 # This will expand any env var you set in the field, e.g. homepage: ${CI_PROJECT_URL}
@@ -82,6 +82,8 @@ disable_globbing: false
 # This will expand any env var you set in the field, e.g. ${REPLACE_BLA}
 # the env var approach can be used to account for differences in platforms
 replaces:
+  - runc
+  - containerd
 
 # Packages it provides. (overridable)
 # This will expand any env var you set in the field, e.g. ${PROVIDES_BLA}
@@ -108,7 +110,6 @@ suggests:
 # This will expand any env var you set in the field, e.g. ${CONFLICTS_BLA}
 # the env var approach can be used to account for differences in platforms
 conflicts:
-  - runc
 
 # Contents to add to the package
 # This can be binaries or any other files.
@@ -119,14 +120,14 @@ contents:
     file_info:
       mode: 0755
       owner: root
-      group: root
+      group: docker
 
   - src: ./docker-compose
     dst: /usr/libexec/docker/cli-plugins/docker-compose
     file_info:
       mode: 0755
       owner: root
-      group: root
+      group: docker
 
   - src: ./config/docker.service
     dst: /usr/lib/systemd/system/docker.service
@@ -152,5 +153,6 @@ umask: 0o002
 
 # Scripts to run at specific stages. (overridable)
 scripts:
+  preinstall: ./script/preinstall.sh
   postinstall: ./script/postinstall.sh
   preremove: ./script/preremove.sh
