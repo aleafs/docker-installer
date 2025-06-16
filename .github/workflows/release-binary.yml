@@ -58,7 +58,7 @@ jobs:
         uses: softprops/action-gh-release@v2.2.2
         with:
           name: ${{ github.ref_name }}
-          tag_name: v${{ env.SEMVER }}
+          tag_name: ${{ startsWith(github.ref, 'refs/tags/') && github.ref_name || 'nightly' }}
           make_latest: ${{ startsWith(github.ref, 'refs/tags/') }}
           prerelease: ${{ !startsWith(github.ref, 'refs/tags/') }}
           generate_release_notes: false
