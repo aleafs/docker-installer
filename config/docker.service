@@ -1,10 +1,11 @@
 [Unit]
 Description=Docker Application Container Engine
 Documentation=https://docs.docker.com
-After=network-online.target docker.socket firewalld.service
+After=network-online.target firewalld.service
 Wants=network-online.target
-Requires=docker.socket
 [Service]
+User=root
+Group=docker
 Environment=container="disable apparmor"
 Type=notify
 # the default is not to use systemd for cgroups because the delegate issues still

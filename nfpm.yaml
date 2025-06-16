@@ -128,9 +128,6 @@ contents:
       owner: root
       group: root
 
-  - src: ./config/docker.socket
-    dst: /usr/lib/systemd/system/docker.socket
-
   - src: ./config/docker.service
     dst: /usr/lib/systemd/system/docker.service
 
