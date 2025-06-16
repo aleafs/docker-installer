@@ -9,8 +9,8 @@
 | Platform           | 包管理  |   x86_64 / amd64   |  arm64 / aarch64   |
 |:-------------------|:----:|:------------------:|:------------------:|
 | CentOS             | rpm  | :white_check_mark: |                    |
-| Ubuntu             | dpkg |        :x:         |                    |
 | RHEL               | rpm  | :white_check_mark: |                    |
 | SUSE Linux 15      | rpm  | :white_check_mark: |                    |
 | Kylin v10          | rpm  | :white_check_mark: | :white_check_mark: |
 | openEuler 20/22/24 | rpm  | :white_check_mark: |                    |
+| Ubuntu             | dpkg |        :x:         |                    |
