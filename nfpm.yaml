@@ -118,7 +118,7 @@ contents:
     file_info:
       mode: 0755
       owner: root
-      group: docker
+      group: root
 
   - src: ./docker-compose
     dst: /usr/libexec/docker/cli-plugins/docker-compose
