@@ -82,8 +82,6 @@ disable_globbing: false
 # This will expand any env var you set in the field, e.g. ${REPLACE_BLA}
 # the env var approach can be used to account for differences in platforms
 replaces:
-  - runc
-  - containerd
 
 # Packages it provides. (overridable)
 # This will expand any env var you set in the field, e.g. ${PROVIDES_BLA}
