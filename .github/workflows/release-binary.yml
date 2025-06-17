@@ -42,9 +42,22 @@ jobs:
         id: rpm-package
         run: |
           docker run --rm -v $PWD:/tmp -e SEMVER=${{env.SEMVER}} -e GOARCH=${{matrix.arch}} -w /tmp goreleaser/nfpm package \
-              --config /tmp/nfpm.yaml \
-              --target /tmp \
-              --packager rpm
+              --config /tmp/nfpm.yaml --target /tmp --packager rpm
+
+      - name: Create deb Package
+        id: deb-package
+        run: |
+          GOARCH=""
+          case "${{ matrix.arch }}" in
+            aarch64)
+            GOARCH="arm64"
+            ;;
+            *)
+            GOARCH="amd64"
+            ;;
+          esca
+          docker run --rm -v $PWD:/tmp -e SEMVER=${{env.SEMVER}} -e GOARCH=${GOARCH} -w /tmp goreleaser/nfpm package \
+              --config /tmp/nfpm.yaml --target /tmp --packager deb
 
       - name: Upload
         uses: softprops/action-gh-release@v2.3.2
