@@ -17,4 +17,4 @@
 | SUSE Linux 15      | rpm  | :white_check_mark: |                    |
 | Kylin v10          | rpm  | :white_check_mark: | :white_check_mark: |
 | openEuler 20/22/24 | rpm  | :white_check_mark: |                    |
-| Ubuntu             | dpkg |        :x:         |                    |
+| Ubuntu 22          | dpkg | :white_check_mark: |                    |
