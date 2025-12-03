@@ -9,6 +9,11 @@ else
   echo "net.ipv4.ip_forward = 1" >> /etc/sysctl.conf
 fi
 
+# kylin
+#if [ -f /usr/local/bin/runc ]; then
+#  rm -fv /usr/local/bin/runc
+#fi
+
 sysctl -p
 
 /bin/systemctl daemon-reload
