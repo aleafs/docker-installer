@@ -18,6 +18,7 @@
 | CentOS 7           | rpm  | :white_check_mark: |                    |
 | RHEL               | rpm  | :white_check_mark: | :white_check_mark: |
 | SUSE Linux 15      | rpm  | :white_check_mark: |                    |
-| Kylin v10          | rpm  | :white_check_mark: | :white_check_mark: |
+| Kylin（银河麒麟） v10    | rpm  | :white_check_mark: | :white_check_mark: |
+| UOS（统信）v20         | rpm  | :white_check_mark: | :white_check_mark: |
 | openEuler 20/22/24 | rpm  | :white_check_mark: |                    |
 | Ubuntu 22          | dpkg | :white_check_mark: |                    |
