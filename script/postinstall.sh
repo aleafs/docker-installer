@@ -10,9 +10,10 @@ else
 fi
 
 # kylin
-#if [ -f /usr/local/bin/runc ]; then
-#  rm -fv /usr/local/bin/runc
-#fi
+# Error response from daemon: failed to create task for container: failed to create shim task: OCI runtime create failed: container_linux.go:340: starting container process caused "permission denied": unknown
+if [ -f /usr/local/bin/runc ]; then
+  rm -fv /usr/local/bin/runc
+fi
 
 sysctl -p
 
