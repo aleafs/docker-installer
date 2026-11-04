@@ -4,8 +4,8 @@ on:
   push:
     tags:
       - v*
-    branches:
-      - "*"
+
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -18,30 +18,33 @@ jobs:
 
     strategy:
       matrix:
-        arch: [ "x86_64", "aarch64" ]
+        arch:
+          - x86_64
+          - aarch64
 
-    env:
-      SEMVER: 27.5.1
+        version:
+          - 27.5.1
+          - 28.5.2
 
     steps:
       - name: Check out
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Download Docker
         run: |
           rm -rf ./docker || echo
-          curl -fSL -o docker.tgz https://download.docker.com/linux/static/stable/${{ matrix.arch }}/docker-${{ env.SEMVER }}.tgz && \
+          curl -fSL -o docker.tgz https://download.docker.com/linux/static/stable/${{ matrix.arch }}/docker-${{ matrix.version }}.tgz && \
           tar zxvf docker.tgz
 
       - name: Download Plugin
         run: |
           rm -rf ./docker-* && \
-          curl -fSL -o ./docker-compose https://github.com/docker/compose/releases/download/v2.33.0/docker-compose-linux-${{ matrix.arch }}
+          curl -fSL -o ./docker-compose https://github.com/docker/compose/releases/download/v2.40.3/docker-compose-linux-${{ matrix.arch }}
 
       - name: Create rpm Package
         id: rpm-package
         run: |
-          docker run --rm -v $PWD:/tmp -e SEMVER=${{env.SEMVER}} -e GOARCH=${{matrix.arch}} -w /tmp goreleaser/nfpm package \
+          docker run --rm -v $PWD:/tmp -e SEMVER=${{matrix.version}} -e GOARCH=${{matrix.arch}} -w /tmp goreleaser/nfpm package \
               --config /tmp/nfpm.yaml --target /tmp --packager rpm
 
       - name: Create deb Package
@@ -56,13 +59,13 @@ jobs:
             GOARCH="amd64"
             ;;
           esac
-          docker run --rm -v $PWD:/tmp -e SEMVER=${{env.SEMVER}} -e GOARCH=${GOARCH} -w /tmp goreleaser/nfpm package \
+          docker run --rm -v $PWD:/tmp -e SEMVER=${{matrix.version}} -e GOARCH=${GOARCH} -w /tmp goreleaser/nfpm package \
               --config /tmp/nfpm.yaml --target /tmp --packager deb
 
       - name: Upload
-        uses: softprops/action-gh-release@v2.3.2
+        uses: softprops/action-gh-release@v3
         with:
-          tag_name: ${{ startsWith(github.ref, 'refs/tags/') && github.ref_name || 'nightly' }}
+          tag_name: ${{ matrix.version }}
           make_latest: ${{ startsWith(github.ref, 'refs/tags/') }}
           prerelease: ${{ !startsWith(github.ref, 'refs/tags/') }}
           generate_release_notes: false
