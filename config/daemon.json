@@ -1,10 +1,16 @@
 {
   "selinux-enabled": false,
+  "ipv6": true,
+  "ip6tables": true,
   "data-root": "/var/lib/docker",
   "default-address-pools": [
     {
       "base": "172.31.0.0/16",
       "size": 24
+    },
+    {
+      "base": "fd00:d0c:2::/56",
+      "size": 64
     }
   ],
   "registry-mirrors": [
