@@ -4,10 +4,7 @@
 
 # Tag & Version
 
-此仓库的`tag`与`docker engine`版本（MAJOR.MINOR.PATCH）追求一致。`v27.5.1`包含如下组件：
-
-* `docker engine`: 27.5.1
-* `docker-compose`: 2.40.3
+此仓库 `tag` 表示构建日期，assets 中按 `docker engine` 版本构建 rpm/deb 包。
 
 # OS Compatibility
 
