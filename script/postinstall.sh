@@ -2,6 +2,7 @@
 
 export LANG=en_US.UTF-8
 
+# sudo sysctl -w net.ipv6.conf.all.forwarding=1
 if grep -w "net.ipv4.ip_forward" /etc/sysctl.conf > /dev/null; then
   sed -i.bak -e 's/net.ipv4.ip_forward\s*=\s*0/net.ipv4.ip_forward = 1/' /etc/sysctl.conf
 else
