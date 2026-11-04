@@ -131,6 +131,9 @@ contents:
   - src: ./config/docker.service
     dst: /usr/lib/systemd/system/docker.service
 
+  - dst: /etc/sysctl.d/99-docker.conf
+    type: ghost
+
   - src: ./config/daemon.json
     dst: /etc/docker/daemon.json
     type: config|noreplace
