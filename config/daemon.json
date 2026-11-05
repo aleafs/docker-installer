@@ -1,8 +1,10 @@
 {
   "selinux-enabled": false,
+  "data-root": "/var/lib/docker",
+  "bip": "172.30.0.1/24",
   "ipv6": true,
   "ip6tables": true,
-  "data-root": "/var/lib/docker",
+  "fixed-cidr-v6": "fd00:d0c:1::/64",
   "default-address-pools": [
     {
       "base": "172.31.0.0/16",
